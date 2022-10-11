@@ -24,6 +24,16 @@ To import the contract in a hardhat-like fashion, you can add the following line
 erc5643/=lib/ERC5643/
 ```
 
+Then you can import ERC5643 like so:
+
+```
+pragma solidity ^0.8.13;
+
+import "erc5643/src/ERC5643.sol";
+
+contract Contract is ERC5643 {}
+```
+
 <!-- USAGE EXAMPLES -->
 
 ## Usage

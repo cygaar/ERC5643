@@ -116,6 +116,9 @@ contract ERC5643 is ERC721, IERC5643 {
         virtual
         returns (uint64)
     {
+        if (!_exists(tokenId)) {
+            revert InvalidTokenId();
+        }
         return _expirations[tokenId];
     }
 

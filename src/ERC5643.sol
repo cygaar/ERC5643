@@ -37,7 +37,7 @@ contract ERC5643 is ERC721, IERC5643 {
         if (duration < minimumRenewalDuration) {
             revert RenewalTooShort();
         } else if (
-            maximumRenewalDuration > 0 && duration > maximumRenewalDuration
+            maximumRenewalDuration != 0 && duration > maximumRenewalDuration
         ) {
             revert RenewalTooLong();
         }
@@ -116,6 +116,9 @@ contract ERC5643 is ERC721, IERC5643 {
         virtual
         returns (uint64)
     {
+        if (!_exists(tokenId)) {
+            revert InvalidTokenId();
+        }
         return _expirations[tokenId];
     }
 
@@ -128,6 +131,9 @@ contract ERC5643 is ERC721, IERC5643 {
         virtual
         returns (bool)
     {
+        if (!_exists(tokenId)) {
+            revert InvalidTokenId();
+        }
         return _isRenewable(tokenId);
     }
 

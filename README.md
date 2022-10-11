@@ -31,7 +31,11 @@ pragma solidity ^0.8.13;
 
 import "erc5643/src/ERC5643.sol";
 
-contract Contract is ERC5643 {}
+contract Contract is ERC5643 {
+    constructor(string memory name_, string memory symbol_)
+        ERC5643(name_, symbol_)
+    {}
+}
 ```
 
 <!-- USAGE EXAMPLES -->

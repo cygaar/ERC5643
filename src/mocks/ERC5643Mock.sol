@@ -18,12 +18,14 @@ contract ERC5643Mock is Ownable, ERC5643 {
         _mint(to, tokenId);
     }
 
-    function mintWithSubscription(address to, uint256 tokenId, uint64 duration) public {
+    function mintWithSubscription(address to, uint256 tokenId, uint64 duration)
+        public
+    {
         _mint(to, tokenId);
-        _updateSubscription(tokenId, duration);
+        _extendSubscription(tokenId, duration);
     }
 
-    function _getRenewalPrice(uint64 duration)
+    function _getRenewalPrice(uint256 tokenId, uint64 duration)
         internal
         view
         override
@@ -51,5 +53,13 @@ contract ERC5643Mock is Ownable, ERC5643 {
 
     function setMaximumRenewalDuration(uint64 duration) external onlyOwner {
         _setMaximumRenewalDuration(duration);
+    }
+
+    /**
+     * @dev This function is used soley for testing purposes and shouldn't be used
+     * in a standalone fashion.
+     */
+    function extendSubscription(uint256 tokenId, uint64 duration) external {
+        _extendSubscription(tokenId, duration);
     }
 }

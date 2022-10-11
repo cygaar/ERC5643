@@ -8,6 +8,7 @@ error RenewalTooShort();
 error RenewalTooLong();
 error InsufficientPayment();
 error SubscriptionNotRenewable();
+error InvalidTokenId();
 
 contract ERC5643 is ERC721, IERC5643 {
     mapping(uint256 => uint64) private _expirations;
@@ -19,6 +20,9 @@ contract ERC5643 is ERC721, IERC5643 {
         ERC721(name_, symbol_)
     {}
 
+    /**
+     * @dev See {IERC5643-renewSubscription}.
+     */
     function renewSubscription(uint256 tokenId, uint64 duration)
         external
         payable
@@ -37,17 +41,27 @@ contract ERC5643 is ERC721, IERC5643 {
             revert RenewalTooLong();
         }
 
-        if (msg.value < _getRenewalPrice(duration)) {
+        if (msg.value < _getRenewalPrice(tokenId, duration)) {
             revert InsufficientPayment();
         }
 
-        _updateSubscription(tokenId, duration);
+        _extendSubscription(tokenId, duration);
     }
 
-    function _updateSubscription(uint256 tokenId, uint64 duration)
+    /**
+     * @dev Extends the subscription for `tokenId` for `duration` seconds.
+     * If the `tokenId` does not exist, an error will be thrown.
+     * If a token is not renewable, an error will be thrown.
+     * Emits a {SubscriptionUpdate} event after the subscription is extended.
+     */
+    function _extendSubscription(uint256 tokenId, uint64 duration)
         internal
         virtual
     {
+        if (!_exists(tokenId)) {
+            revert InvalidTokenId();
+        }
+
         uint64 currentExpiration = _expirations[tokenId];
         uint64 newExpiration;
         if (currentExpiration == 0) {
@@ -64,7 +78,12 @@ contract ERC5643 is ERC721, IERC5643 {
         emit SubscriptionUpdate(tokenId, newExpiration);
     }
 
-    function _getRenewalPrice(uint64 duration)
+    /**
+     * @dev Gets the price to renew a subscription for `duration` seconds for
+     * a given tokenId. This value is defaulted to 0, but should be overridden in
+     * implementing contracts.
+     */
+    function _getRenewalPrice(uint256 tokenId, uint64 duration)
         internal
         view
         virtual
@@ -73,6 +92,9 @@ contract ERC5643 is ERC721, IERC5643 {
         return 0;
     }
 
+    /**
+     * @dev See {IERC5643-cancelSubscription}.
+     */
     function cancelSubscription(uint256 tokenId) external payable virtual {
         require(
             _isApprovedOrOwner(msg.sender, tokenId),
@@ -84,6 +106,9 @@ contract ERC5643 is ERC721, IERC5643 {
         emit SubscriptionUpdate(tokenId, 0);
     }
 
+    /**
+     * @dev See {IERC5643-expiresAt}.
+     */
     function expiresAt(uint256 tokenId)
         external
         view
@@ -93,6 +118,9 @@ contract ERC5643 is ERC721, IERC5643 {
         return _expirations[tokenId];
     }
 
+    /**
+     * @dev See {IERC5643-isRenewable}.
+     */
     function isRenewable(uint256 tokenId)
         external
         view
@@ -102,6 +130,11 @@ contract ERC5643 is ERC721, IERC5643 {
         return _isRenewable(tokenId);
     }
 
+    /**
+     * @dev Internal function to determine renewability. Implementing contracts
+     * should override this function if renewabilty should be disabled for all or
+     * some tokens.
+     */
     function _isRenewable(uint256 tokenId)
         internal
         view
@@ -111,14 +144,23 @@ contract ERC5643 is ERC721, IERC5643 {
         return true;
     }
 
+    /**
+     * @dev Internal function to set the minimum renewal duration.
+     */
     function _setMinimumRenewalDuration(uint64 duration) internal virtual {
         _minimumRenewalDuration = duration;
     }
 
+    /**
+     * @dev Internal function to set the maximum renewal duration.
+     */
     function _setMaximumRenewalDuration(uint64 duration) internal virtual {
         _maximumRenewalDuration = duration;
     }
 
+    /**
+     * @dev See {IERC165-supportsInterface}.
+     */
     function supportsInterface(bytes4 interfaceId)
         public
         view

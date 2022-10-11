@@ -104,4 +104,9 @@ contract ERC5643Test is Test {
         erc5643.cancelSubscription(tokenId);
         assertEq(erc5643.expiresAt(tokenId), 0);
     }
+
+    function testExtendSubscriptionInvalidToken() public {
+        vm.expectRevert(InvalidTokenId.selector);
+        erc5643.extendSubscription(tokenId + 100, 30 days);
+    }
 }

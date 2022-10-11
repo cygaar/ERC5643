@@ -37,7 +37,7 @@ contract ERC5643 is ERC721, IERC5643 {
         if (duration < minimumRenewalDuration) {
             revert RenewalTooShort();
         } else if (
-            maximumRenewalDuration > 0 && duration > maximumRenewalDuration
+            maximumRenewalDuration != 0 && duration > maximumRenewalDuration
         ) {
             revert RenewalTooLong();
         }

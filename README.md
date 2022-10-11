@@ -2,11 +2,11 @@
 
 ## About The Project
 
-<!-- Docs -->
+ERC5643 provides a base implementation of [EIP5643](https://eips.ethereum.org/EIPS/eip-5643) to make building subscription
+NFTs easier and more standardized.
 
-## EIP
-
-https://eips.ethereum.org/EIPS/eip-5643
+This is **experimental software** and is provided on an "as is" and "as available" basis.
+We **do not give any warranties** and **will not be liable for any loss** incurred through any use of this codebase.
 
 <!-- Installation -->
 
@@ -18,8 +18,6 @@ To install with [**Foundry**](https://github.com/gakonst/foundry):
 forge install cygaar/ERC5643
 ```
 
-```
-
 <!-- USAGE EXAMPLES -->
 
 ## Usage
@@ -27,14 +25,13 @@ forge install cygaar/ERC5643
 A good starting point is the [ERC5643Mock contract](https://github.com/cygaar/ERC5643/blob/main/src/mocks/ERC5643Mock.sol)
 which provides an example implementation of ERC5643.
 
-```
-
 <!-- ROADMAP -->
 
 ## Roadmap
 
 - [ ] Add npm support
 - [ ] Add auto-renewal support via ERC20 tokens
+- [ ] Gas optimizations
 - [ ] Maintain full test coverage
 
 See the [open issues](https://github.com/cygaar/ERC5643/issues) for a full list of proposed features (and known issues).

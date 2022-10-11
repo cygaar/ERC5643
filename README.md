@@ -18,6 +18,12 @@ To install with [**Foundry**](https://github.com/gakonst/foundry):
 forge install cygaar/ERC5643
 ```
 
+To import the contract in a hardhat-like fashion, you can add the following line to your [remappings](https://book.getfoundry.sh/reference/forge/forge-remappings):
+
+```
+erc5643/=lib/ERC5643/
+```
+
 <!-- USAGE EXAMPLES -->
 
 ## Usage

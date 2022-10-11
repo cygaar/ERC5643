@@ -64,10 +64,4 @@ Don't forget to give the project a star! Thanks again!
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
 
-<!-- CONTACT -->
-
-## Contact
-
-- cygaar (maintainer) - [@cygaar_dev](https://twitter.com/cygaar_dev)
-
 Project Link: [https://github.com/cygaar/ERC5643](https://github.com/cygaar/ERC5643)

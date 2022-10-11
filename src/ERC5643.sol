@@ -14,8 +14,8 @@ error InvalidTokenId();
 contract ERC5643 is ERC721, IERC5643 {
     mapping(uint256 => uint64) private _expirations;
 
-    uint64 _minimumRenewalDuration;
-    uint64 _maximumRenewalDuration;
+    uint64 private minimumRenewalDuration;
+    uint64 private maximumRenewalDuration;
 
     constructor(string memory name_, string memory symbol_)
         ERC721(name_, symbol_)
@@ -34,10 +34,10 @@ contract ERC5643 is ERC721, IERC5643 {
             "Caller is not owner nor approved"
         );
 
-        if (duration < _minimumRenewalDuration) {
+        if (duration < minimumRenewalDuration) {
             revert RenewalTooShort();
         } else if (
-            _maximumRenewalDuration > 0 && duration > _maximumRenewalDuration
+            maximumRenewalDuration > 0 && duration > maximumRenewalDuration
         ) {
             revert RenewalTooLong();
         }
@@ -149,14 +149,14 @@ contract ERC5643 is ERC721, IERC5643 {
      * @dev Internal function to set the minimum renewal duration.
      */
     function _setMinimumRenewalDuration(uint64 duration) internal virtual {
-        _minimumRenewalDuration = duration;
+        minimumRenewalDuration = duration;
     }
 
     /**
      * @dev Internal function to set the maximum renewal duration.
      */
     function _setMaximumRenewalDuration(uint64 duration) internal virtual {
-        _maximumRenewalDuration = duration;
+        maximumRenewalDuration = duration;
     }
 
     /**

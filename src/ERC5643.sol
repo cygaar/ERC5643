@@ -10,6 +10,7 @@ error RenewalTooLong();
 error InsufficientPayment();
 error SubscriptionNotRenewable();
 error InvalidTokenId();
+error CallerIsNotOwnerNorApproved();
 
 contract ERC5643 is ERC721, IERC5643 {
     mapping(uint256 => uint64) private _expirations;
@@ -17,11 +18,10 @@ contract ERC5643 is ERC721, IERC5643 {
     uint64 private minimumRenewalDuration;
     uint64 private maximumRenewalDuration;
 
-    modifier onlyApprovedOrOwner(address user, uint256 tokenId) {
-        require(
-            _isApprovedOrOwner(msg.sender, tokenId),
-            "Caller is not owner nor approved"
-        );
+    modifier onlyApprovedOrOwner(uint256 tokenId) {
+        if (!_isApprovedOrOwner(msg.sender, tokenId)) {
+            revert CallerIsNotOwnerNorApproved();
+        }
         _;
     }
 
@@ -36,7 +36,7 @@ contract ERC5643 is ERC721, IERC5643 {
         external
         payable
         virtual
-        onlyApprovedOrOwner(msg.sender, tokenId)
+        onlyApprovedOrOwner(tokenId)
     {
         if (duration < minimumRenewalDuration) {
             revert RenewalTooShort();
@@ -100,7 +100,7 @@ contract ERC5643 is ERC721, IERC5643 {
     /**
      * @dev See {IERC5643-cancelSubscription}.
      */
-    function cancelSubscription(uint256 tokenId) external payable virtual onlyApprovedOrOwner(msg.sender, tokenId) {
+    function cancelSubscription(uint256 tokenId) external payable virtual onlyApprovedOrOwner(tokenId) {
         delete _expirations[tokenId];
 
         emit SubscriptionUpdate(tokenId, 0);

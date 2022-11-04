@@ -30,7 +30,7 @@ contract ERC5643Test is Test {
     }
 
     function testRenewalNotOwner() public {
-        vm.expectRevert("Caller is not owner nor approved");
+        vm.expectRevert(CallerNotOwnerNorApproved.selector);
         erc5643.renewSubscription(tokenId, 2000);
     }
 
@@ -90,7 +90,7 @@ contract ERC5643Test is Test {
     }
 
     function testCancelNotOwner() public {
-        vm.expectRevert("Caller is not owner nor approved");
+        vm.expectRevert(CallerNotOwnerNorApproved.selector);
         erc5643.cancelSubscription(tokenId);
     }
 

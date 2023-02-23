@@ -65,7 +65,7 @@ contract ERC5643 is ERC721, IERC5643 {
 
         uint64 currentExpiration = _expirations[tokenId];
         uint64 newExpiration;
-        if (currentExpiration == 0) {
+        if ((currentExpiration == 0) || (currentExpiration < block.timestamp)) {
             newExpiration = uint64(block.timestamp) + duration;
         } else {
             if (!_isRenewable(tokenId)) {

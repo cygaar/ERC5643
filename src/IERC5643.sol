@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.19;
 
 interface IERC5643 {
     /// @notice Emitted when a subscription expiration changes

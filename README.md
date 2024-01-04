@@ -27,7 +27,7 @@ erc5643/=lib/ERC5643/
 Then you can import ERC5643 like so:
 
 ```solidity
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.19;
 
 import "erc5643/src/ERC5643.sol";
 
